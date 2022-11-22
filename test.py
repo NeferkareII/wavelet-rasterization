@@ -7,21 +7,21 @@ if __name__ == '__main__':
 
     def single_test(tp, n, w, h, z, channel):
         contour = tp.Contour([(randint(1,h-1), randint(1,w-1)) \
-            for i in xrange(n)])
+            for i in range(n)])
         if contour.area() < 0:  return None
 
         ts = time.time()
         raster = Rasterizer(contour, w, h).get()
-        print '%s\ttime: %2.1fs' % (contour, time.time()-ts)
+        print('%s\ttime: %2.1fs' % (contour, time.time()-ts))
 
         raster = np.array(np.asarray(raster)*255+0.5, np.uint8)
         raster = cv2.resize(raster, (w*z,h*z), interpolation=cv2.INTER_NEAREST)
         img = np.zeros((h*z,w*z,3), np.uint8)
         img[:,:,channel] = raster
-        line_color = [0 if channel == ch else 255 for ch in xrange(3)]
+        line_color = [0 if channel == ch else 255 for ch in range(3)]
         for sx, sy, ex, ey in contour.to_lines():
             cv2.line(img, (int(sy*z),int(sx*z)), (int(ey*z),int(ex*z)), 
-                line_color, 2, cv2.CV_AA)
+                line_color, 2, cv2.LINE_AA)
         return img
 
     w, h, z = 17, 13, 50

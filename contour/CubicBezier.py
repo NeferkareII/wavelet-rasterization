@@ -121,7 +121,7 @@ class Contour:
         return s
 
     def each(self): 
-        for i in xrange(0, len(self.contour), 3):
+        for i in range(0, len(self.contour), 3):
             v3 = self.contour[i]
             v2 = self.contour[i-1]
             v1 = self.contour[i-2]
@@ -131,7 +131,7 @@ class Contour:
     def to_lines(self):
         tts = np.linspace(0,1, num=50)
         for section in self.each():
-            section = (s[i] for s in section for i in xrange(2))
+            section = (s[i] for s in section for i in range(2))
             bezier = CubicBezier(*section)
             for start, end in zip(tts[:-1], tts[1:]):
                 sx, sy = bezier.evaluate(start)

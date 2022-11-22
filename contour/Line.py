@@ -14,7 +14,7 @@ class Line:
         t0, t1 = 0, 1
         xdelta = self.x1 - self.x0
         ydelta = self.y1 - self.y0
-        for edge in xrange(4):#traverse through left, right, bottom, top edges.
+        for edge in range(4):#traverse through left, right, bottom, top edges.
             if   edge == 0:   p, q = -xdelta, -(left-self.x0) 
             elif edge == 1:   p, q =  xdelta,  (right-self.x0)
             elif edge == 2:   p, q =  ydelta,  (bottom-self.y0)

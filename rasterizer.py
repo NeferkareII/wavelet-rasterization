@@ -17,12 +17,12 @@ class Rasterizer:
         self.contour.process(normalize)
         self.area = self.contour.area()
         self.lattice = [Point(*normalize((x,y))) \
-                        for x in xrange(h) for y in xrange(w)]
+                        for x in range(h) for y in range(w)]
         # prepare all c
         self.all_c = {}
-        for j in xrange(self.max_j+1):
-            for kx in xrange(2**j):
-                for ky in xrange(2**j):
+        for j in range(self.max_j+1):
+            for kx in range(2**j):
+                for ky in range(2**j):
                     self.all_c[(j, kx,ky)] = self.c(j, (kx,ky))
 
     def psi(self, p, e, j, k):
@@ -34,7 +34,7 @@ class Rasterizer:
     def c(self, j, k):
         def transform(section, Q):
             return (2**(j+1)*p[i]-k[i]*2-Q[i] \
-                    for p in section for i in xrange(2))
+                    for p in section for i in range(2))
         Q_00, Q_01 = Point(0, 0), Point(0, 1)
         Q_10, Q_11 = Point(1, 0), Point(1, 1)
         c10, c01, c11 = 0, 0, 0
@@ -54,9 +54,9 @@ class Rasterizer:
     def g(self, p):
         s = self.area
         E = [Point(0,1), Point(1,0), Point(1,1)]
-        for j in xrange(self.max_j+1):
-            for kx in xrange(2**j):
-                for ky in xrange(2**j):
+        for j in range(self.max_j+1):
+            for kx in range(2**j):
+                for ky in range(2**j):
                     k = Point(kx, ky)
                     cs = self.all_c[(j, kx,ky)]
                     for i, e in enumerate(E):
@@ -68,13 +68,13 @@ class Rasterizer:
     def g_fast(self, p):
         s = self.area
         E = (Point(0,1), Point(1,0), Point(1,1))
-        for j in xrange(self.max_j+1):
+        for j in range(self.max_j+1):
             exp_j = 2**j
             exp_jpx, exp_jpy = exp_j*p.x, exp_j*p.y
-            for kx in xrange(exp_j):
+            for kx in range(exp_j):
                 exp_jpkx = exp_jpx-kx
                 if exp_jpkx < 0 or exp_jpkx >= 1:     continue
-                for ky in xrange(exp_j):
+                for ky in range(exp_j):
                     exp_jpky = exp_jpy-ky
                     if exp_jpky < 0 or exp_jpky >= 1: continue
                     cs = self.all_c[(j,kx,ky)]
@@ -89,7 +89,7 @@ class Rasterizer:
 
     def get(self):
         px_arr = [self.g_fast(p) for p in self.lattice]
-        px_mat = [px_arr[i*self.w : (i+1)*self.w] for i in xrange(self.h)]
+        px_mat = [px_arr[i*self.w : (i+1)*self.w] for i in range(self.h)]
         return px_mat
 
 # -----------------------------------------------------------------------------
@@ -113,4 +113,4 @@ if __name__ == '__main__':
     raster = Rasterizer(contour, 64, 64).get()
     raster = np.array(np.asarray(raster)*255+0.5, np.uint8)
     cv2.imwrite('var/CubicBezier.png', raster)
-    print time.time() - ts
+    print(time.time() - ts)
